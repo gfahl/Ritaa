@@ -1,0 +1,4 @@
+#!/usr/bin/env ruby
+require './lib/ritaa'
+# Ritaa.run(["test.ritaa", "-svg"])
+Ritaa.run(["test.ritaa", "-svg", "-png"])
