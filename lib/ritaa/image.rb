@@ -112,8 +112,16 @@ module Ritaa
               .map(&:to_h)
             @shapes << Line.new(h_shape.merge(id: $1))
             @styles["#" + $1] = h_style
+          when /^(P\d+) (.*)/
+            h_shape, h_style = JSON.parse($2, symbolize_names: true)
+              .partition { |k, v| [:points].include?(k) }
+              .map(&:to_h)
+            @shapes << Polygon.new(h_shape.merge(id: $1))
+            @styles["#" + $1] = h_style
           when /^line (.*)/
             @shapes << Line.new(JSON.parse($1, symbolize_names: true))
+          when /^polygon (.*)/
+            @shapes << Polygon.new(JSON.parse($1, symbolize_names: true))
           when /^image (.*)/
             h = JSON.parse($1, symbolize_names: true)
             margin = h.delete(:margin)
