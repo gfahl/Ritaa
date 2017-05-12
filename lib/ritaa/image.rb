@@ -2,12 +2,12 @@ module Ritaa
   class Image
     def initialize(spec)
       ix = spec.find_index { |s| s =~ /^\w/ }
-      dia, rest = spec[0...ix], spec[ix..-1]
-      addendum, shapes_and_styles = rest.partition { |s| s =~ /^edge / }
-      @properties = {}
+      graphics, text = spec[0...ix], spec[ix..-1]
+      addendum, shapes_and_styles = text.partition { |s| s =~ /^edge / }
       @shapes = []
+      AsciiDiagram.new(graphics, addendum).to_shapes.each { |shape| add_shape(shape) }
+      @properties = {}
       @styles = { line: {}, polygon: {}, polyline: {}, path: {} }
-      parse_diagram(dia, addendum)
       parse_shapes_and_styles(shapes_and_styles)
     end
 
@@ -28,89 +28,6 @@ module Ritaa
     def margin_left; @properties[:"margin-left"] || 0; end
     def margin_right; @properties[:"margin-right"] || 0; end
     def margin_top; @properties[:"margin-top"] || 0; end
-
-    def parse_diagram(dia, addendum)
-      g = UndirectedGraph.new
-
-      # nodes
-      dia.each.with_index do |row, y|
-        row.each_char.with_index do |ch, x|
-          g.add_node(x, y) if ch == "+"
-        end
-      end
-      sz = g.nodes.size
-
-      # horizontal edges
-      g.nodes[0..sz - 2].zip(g.nodes[1..sz - 1]).each do |n1, n2|
-        if n1.y == n2.y && dia[n1.y][n1.x..n2.x] =~ /^\+\-+\+$/
-          g.add_line(n1, n2)
-        end
-      end
-      # vertical edges
-      transposed_dia = dia
-        .map { |s| ("%-*s" % [dia.map(&:size).max, s]).split(//) }
-        .transpose
-        .map(&:join)
-      _nodes = g.nodes.sort_by { |node| [node.x, node.y] }
-      _nodes[0..sz - 2].zip(_nodes[1..sz - 1]).each do |n1, n2|
-        if n1.x == n2.x && transposed_dia[n1.x][n1.y..n2.y] =~ /^\+\|+\+$/
-          g.add_line(n1, n2)
-        end
-      end
-      # additional edges specified outside diagram
-      addendum.each do |s|
-        h = JSON.parse(s[/^edge (.*)/, 1], symbolize_names: true)
-        n1 = g.get_or_add_node(h[:x1], h[:y1])
-        n2 = g.get_or_add_node(h[:x2], h[:y2])
-        g.add_line(n1, n2)
-      end
-
-      # split graph into two: one for faces and one for non-faces
-      undecided = g.lines
-      nonface_edges = []
-      loop do
-        end_edges, undecided = undecided.partition do |e|
-          e.nodes[0].lines.select { |_e| undecided.include?(_e) } == [e] ||
-          e.nodes[1].lines.select { |_e| undecided.include?(_e) } == [e]
-        end
-        break if end_edges.empty?
-        nonface_edges += end_edges
-      end
-      face_graph = DirectedGraph.new(undecided)
-      nonface_graph = UndirectedGraph.new(nonface_edges)
-
-      # create shapes for non-faces
-      nonface_graph.components.each do |g|
-        add_shape(
-          case g.nodes.map(&:degree).max
-            when 1 then Line
-            when 2 then Polyline
-            else Path
-          end.new(g))
-      end
-
-      # create polygons for faces
-      used = {} # Arc => true
-      while used.size < face_graph.arcs.size
-        g = DirectedGraph.new
-        angle_sum = 0
-        arc = start_arc = face_graph.arcs.find { |a| !used[a] }
-        loop do
-          g.add_arc(
-            g.get_or_add_node(arc.tail.x, arc.tail.y),
-            g.get_or_add_node(arc.head.x, arc.head.y))
-          used[arc] = true
-          candidates = arc.head.departing.select do |a|
-            !used[a] && a.head != arc.tail || a == start_arc
-          end
-          next_arc = candidates.min_by { |a| DirectedGraph::Arc.angle(arc, a) }
-          angle_sum += DirectedGraph::Arc.angle(arc, next_arc)
-          break if next_arc == start_arc
-          arc = next_arc
-        end
-        add_shape(Polygon.new(g)) if angle_sum < g.nodes.size * 180
-      end
-    end
 
     def parse_shapes_and_styles(shapes_and_styles)
       shapes_and_styles.each do |s|
