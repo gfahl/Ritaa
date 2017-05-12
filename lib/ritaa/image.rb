@@ -11,6 +11,15 @@ module Ritaa
       parse_shapes_and_styles(shapes_and_styles)
     end
 
+    def add_shape(shape)
+      @shapes << shape
+      shape.image = self
+    end
+
+    def coord_to_point(x, y)
+      [x * 5, y * 10]
+    end
+
     def height
       @properties[:height] || @shapes.map(&:max_y).max
     end
@@ -72,12 +81,12 @@ module Ritaa
 
       # create shapes for non-faces
       nonface_graph.components.each do |g|
-        @shapes <<
+        add_shape(
           case g.nodes.map(&:degree).max
             when 1 then Line
             when 2 then Polyline
             else Path
-          end.new(g)
+          end.new(g))
       end
 
       # create polygons for faces
@@ -99,7 +108,7 @@ module Ritaa
           break if next_arc == start_arc
           arc = next_arc
         end
-        @shapes << Polygon.new(g) if angle_sum < g.nodes.size * 180
+        add_shape(Polygon.new(g)) if angle_sum < g.nodes.size * 180
       end
     end
 
@@ -110,18 +119,18 @@ module Ritaa
             h_shape, h_style = JSON.parse($2, symbolize_names: true)
               .partition { |k, v| [:x1, :y1, :x2, :y2].include?(k) }
               .map(&:to_h)
-            @shapes << Line.new(h_shape.merge(id: $1))
+            add_shape(Line.new(h_shape.merge(id: $1)))
             @styles["#" + $1] = h_style
           when /^(P\d+) (.*)/
             h_shape, h_style = JSON.parse($2, symbolize_names: true)
               .partition { |k, v| [:points].include?(k) }
               .map(&:to_h)
-            @shapes << Polygon.new(h_shape.merge(id: $1))
+            add_shape(Polygon.new(h_shape.merge(id: $1)))
             @styles["#" + $1] = h_style
           when /^line (.*)/
-            @shapes << Line.new(JSON.parse($1, symbolize_names: true))
+            add_shape(Line.new(JSON.parse($1, symbolize_names: true)))
           when /^polygon (.*)/
-            @shapes << Polygon.new(JSON.parse($1, symbolize_names: true))
+            add_shape(Polygon.new(JSON.parse($1, symbolize_names: true)))
           when /^image (.*)/
             h = JSON.parse($1, symbolize_names: true)
             margin = h.delete(:margin)

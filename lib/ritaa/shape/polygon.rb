@@ -2,26 +2,24 @@ module Ritaa
   class Polygon < Shape
 
     def initialize(arg = nil)
-      case arg
-        when Hash
-          @properties = arg
-          coordinates = @properties
-            .delete(:points)
-            .split(" ")
-            .map { |s| s.split(",").map(&:to_i) }
-        when DirectedGraph
-          @properties = {}
-          coordinates = arg.nodes.map { |node| [node.x, node.y] }
-      end
-      @points = coordinates.map { |x, y| [x * 5, y * 10] }
+      @properties, @coordinates =
+        case arg
+          when Hash
+            points = arg.delete(:points)
+            [arg, points.split(" ").map { |s| s.split(",").map(&:to_i) }]
+          when DirectedGraph
+            [{}, arg.nodes.map { |node| node.to_a }]
+        end
     end
 
-    def max_x; @points.map { |x, y| x }.max; end
-    def max_y; @points.map { |x, y| y }.max; end
+    def max_x; @coordinates.map { |x, y| coord_to_point(x, y)[0] }.max; end
+    def max_y; @coordinates.map { |x, y| coord_to_point(x, y)[1] }.max; end
 
     def to_element
       e = REXML::Element.new("polygon")
-      e.attributes["points"] = @points.map { |x, y| "%d,%d" % [x, y] }.join(" ")
+      e.attributes["points"] = @coordinates
+        .map { |x, y| "%d,%d" % coord_to_point(x, y) }
+        .join(" ")
       styles = []
       @properties.each do |k, v|
         case k
