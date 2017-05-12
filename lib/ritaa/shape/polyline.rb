@@ -1,24 +1,22 @@
 module Ritaa
   class Polyline < Shape
-
     def initialize(graph)
-      a = [graph.nodes.find { |node| node.degree == 1 }]
+      nodes = [graph.nodes.find { |node| node.degree == 1 }]
       (graph.nodes.size - 1).times do
-        a << a.last.lines.map(&:nodes).flatten.find { |node| !a.include?(node) }
+        nodes << nodes.last.lines.map(&:nodes).flatten.find { |node| !nodes.include?(node) }
       end
-      @coordinates = a.map { |node| node.to_a }
+      @points = nodes.map(&:point)
     end
 
-    def max_x; @coordinates.map { |x, y| coord_to_point(x, y)[0] }.max; end
-    def max_y; @coordinates.map { |x, y| coord_to_point(x, y)[1] }.max; end
+    def max_x; @points.map { |p| Image::Point.new(p).x }.max; end
+    def max_y; @points.map { |p| Image::Point.new(p).y }.max; end
 
     def to_element
       e = REXML::Element.new("polyline")
-      e.attributes["points"] = @coordinates
-        .map { |x, y| "%d,%d" % coord_to_point(x, y) }
+      e.attributes["points"] = @points
+        .map { |p| "%d,%d" % Image::Point.new(p).to_a }
         .join(" ")
       e
     end
-
   end
 end

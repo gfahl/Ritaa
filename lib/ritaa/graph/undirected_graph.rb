@@ -29,7 +29,7 @@ module Ritaa
     class Node < Graph::Node
       attr_reader :lines
 
-      def initialize(x, y)
+      def initialize(point)
         super
         @lines = []
       end

@@ -7,20 +7,20 @@ module Ritaa
       @edges = []
       edges.each do |e|
         _n1, _n2 = e.nodes
-        n1 = get_or_add_node(_n1.x, _n1.y)
-        n2 = get_or_add_node(_n2.x, _n2.y)
+        n1 = get_or_add_node(_n1.point)
+        n2 = get_or_add_node(_n2.point)
         yield n1, n2
       end
     end
 
-    def add_node(x, y)
-      n = self.class::Node.new(x, y)
+    def add_node(point)
+      n = self.class::Node.new(point)
       @nodes << n
       n
     end
 
-    def get_or_add_node(x, y)
-      @nodes.find { |node| node.x == x && node.y == y } || add_node(x, y)
+    def get_or_add_node(point)
+      @nodes.find { |node| node.to_a == point.to_a } || add_node(point)
     end
 
     def inspect
@@ -28,14 +28,16 @@ module Ritaa
     end
 
     class Node # abstract
-      attr_reader :x, :y
+      attr_reader :point
 
-      def initialize(x, y)
-        @x, @y = x, y
+      def initialize(point)
+        @point = point
       end
 
-      def inspect; "(N:%d,%d)" % [@x, @y]; end
-      def to_a; [@x, @y]; end
+      def inspect; "(N:%d,%d)" % to_a; end
+      def to_a; [x, y]; end
+      def x; @point.x; end
+      def y; @point.y; end
     end
 
     class Edge # abstract

@@ -16,10 +16,6 @@ module Ritaa
       shape.image = self
     end
 
-    def coord_to_point(x, y)
-      [x * 5, y * 10]
-    end
-
     def height
       @properties[:height] || @shapes.map(&:max_y).max
     end
@@ -100,6 +96,12 @@ module Ritaa
 
     def width
       @properties[:height] || @shapes.map(&:max_x).max
+    end
+
+    class Point < Ritaa::Point
+      def initialize(ascii_diagram_point)
+        super(ascii_diagram_point.x * 5, ascii_diagram_point.y * 10)
+      end
     end
   end
 end

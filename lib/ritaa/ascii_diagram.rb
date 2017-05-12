@@ -6,7 +6,7 @@ module Ritaa
       # nodes
       dia.each.with_index do |row, y|
         row.each_char.with_index do |ch, x|
-          g.add_node(x, y) if ch == "+"
+          g.add_node(Point.new(x, y)) if ch == "+"
         end
       end
       sz = g.nodes.size
@@ -31,8 +31,8 @@ module Ritaa
       # additional edges specified outside diagram
       addendum.each do |s|
         h = JSON.parse(s[/^edge (.*)/, 1], symbolize_names: true)
-        n1 = g.get_or_add_node(h[:x1], h[:y1])
-        n2 = g.get_or_add_node(h[:x2], h[:y2])
+        n1 = g.get_or_add_node(Point.new(h[:x1], h[:y1]))
+        n2 = g.get_or_add_node(Point.new(h[:x2], h[:y2]))
         g.add_line(n1, n2)
       end
 
@@ -67,8 +67,8 @@ module Ritaa
         arc = start_arc = @faces_graph.arcs.find { |a| !used[a] }
         loop do
           g.add_arc(
-            g.get_or_add_node(arc.tail.x, arc.tail.y),
-            g.get_or_add_node(arc.head.x, arc.head.y))
+            g.get_or_add_node(arc.tail.point),
+            g.get_or_add_node(arc.head.point))
           used[arc] = true
           candidates = arc.head.departing.select do |a|
             !used[a] && a.head != arc.tail || a == start_arc
@@ -83,5 +83,7 @@ module Ritaa
 
       res
     end
+
+    class Point < Ritaa::Point; end
   end
 end

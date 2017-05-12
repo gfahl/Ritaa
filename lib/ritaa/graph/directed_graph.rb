@@ -17,7 +17,7 @@ module Ritaa
     class Node < Graph::Node
       attr_reader :departing, :arriving
 
-      def initialize(x, y)
+      def initialize(point)
         super
         @departing = []
         @arriving = []
