@@ -40,10 +40,9 @@ module Ritaa
               .map(&:to_h)
             add_shape(Polygon.new(h_shape.merge(id: $1)))
             @styles["#" + $1] = h_style
-          when /^line (.*)/
-            add_shape(Line.new(JSON.parse($1, symbolize_names: true)))
-          when /^polygon (.*)/
-            add_shape(Polygon.new(JSON.parse($1, symbolize_names: true)))
+          when /^(line|polyline|polygon|path) (.*)/
+            klass = Object.const_get("Ritaa").const_get($1.capitalize)
+            add_shape(klass.new(JSON.parse($2, symbolize_names: true)))
           when /^image (.*)/
             h = JSON.parse($1, symbolize_names: true)
             margin = h.delete(:margin)
@@ -57,6 +56,7 @@ module Ritaa
           when /^(line|polyline|polygon|path)s (.*)/
             h = JSON.parse($2, symbolize_names: true)
             @styles[$1.to_sym].merge!(h)
+          else raise "Unexpected entry: %s" % s
         end
       end
     end
