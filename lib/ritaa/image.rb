@@ -1,11 +1,22 @@
 module Ritaa
   class Image
+    RESERVED_WORDS = %w(
+      line path polygon polyline
+      lines paths polygons polylines
+      edge image)
+
+    def Image.extract_identifiers(shapes_and_styles)
+      shapes_and_styles.map { |s| s[/^\w+/] }.uniq - RESERVED_WORDS
+    end
+
     def initialize(spec)
       ix = spec.find_index { |s| s =~ /^\w/ }
       graphics, text = spec[0...ix], spec[ix..-1]
       addendum, shapes_and_styles = text.partition { |s| s =~ /^edge / }
       @shapes = []
-      AsciiDiagram.new(graphics, addendum).to_shapes.each { |shape| add_shape(shape) }
+      AsciiDiagram.new(graphics, addendum, Image.extract_identifiers(shapes_and_styles))
+        .to_shapes
+        .each { |shape| add_shape(shape) }
       @properties = {}
       @styles = { line: {}, polygon: {}, polyline: {}, path: {} }
       parse_shapes_and_styles(shapes_and_styles)
@@ -38,7 +49,7 @@ module Ritaa
             h_shape, h_style = JSON.parse($2, symbolize_names: true)
               .partition { |k, v| [:points].include?(k) }
               .map(&:to_h)
-            add_shape(Polygon.new(h_shape.merge(id: $1)))
+            add_shape(Polygon.new(h_shape.merge(id: $1))) if h_shape[:points]
             @styles["#" + $1] = h_style
           when /^(line|polyline|polygon|path) (.*)/
             klass = Object.const_get("Ritaa").const_get($1.capitalize)
@@ -56,6 +67,9 @@ module Ritaa
           when /^(line|polyline|polygon|path)s (.*)/
             h = JSON.parse($2, symbolize_names: true)
             @styles[$1.to_sym].merge!(h)
+          when /^([a-z]\w*) (.*)/
+            h = JSON.parse($2, symbolize_names: true)
+            @styles["." + $1] = h
           else raise "Unexpected entry: %s" % s
         end
       end

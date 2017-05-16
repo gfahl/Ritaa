@@ -1,5 +1,14 @@
 module Ritaa
-  VERSION = '0.1.0'
+  VERSION = '0.2.0'
+
+  ########## 0.2.0
+  #
+  # Recognize identifiers inside polygons
+  #
+  # An identifier becomes an svg *id* attribute if it starts with an upper-case letter
+  # An identifier becomes an svg *class* attribute if it starts with a lower-case letter
+  #
+  # Polygons, polylines, and paths can now be specified in the JSON section
 
   ########## 0.1.0
   #

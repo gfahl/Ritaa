@@ -1,6 +1,19 @@
 module Ritaa
   class AsciiDiagram
-    def initialize(dia, addendum)
+    def initialize(dia, addendum, identifiers)
+      @identifiers = []
+      identifiers.each do |id|
+        regex = Regexp.new(id + "\\W")
+        dia.each.with_index do |s, row|
+          col = -1
+          loop do
+            col = (s + " ").index(regex, col + 1)
+            break unless col
+            @identifiers << [col, row, id]
+          end
+        end
+      end
+
       g = UndirectedGraph.new
 
       # nodes
@@ -78,7 +91,15 @@ module Ritaa
           break if next_arc == start_arc
           arc = next_arc
         end
-        res << Polygon.new(g) if angle_sum < g.nodes.size * 180
+        if angle_sum < g.nodes.size * 180
+          polygon = Polygon.new(g)
+          s = polygon.find_identifier(@identifiers)
+          case s
+            when /^[A-Z]/ then polygon.properties[:id] = s
+            when /^[a-z]/ then polygon.properties[:class] = s
+          end
+          res << polygon
+        end
       end
 
       res
