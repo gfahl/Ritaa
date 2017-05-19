@@ -98,7 +98,7 @@ module Ritaa
             when /^[A-Z]/ then polygon.properties[:id] = s
             when /^[a-z]/ then polygon.properties[:class] = s
           end
-          res << polygon
+          res << polygon unless s == "nil"
         end
       end
 

@@ -3,10 +3,10 @@ module Ritaa
     RESERVED_WORDS = %w(
       line path polygon polyline
       lines paths polygons polylines
-      edge image)
+      edge image nil)
 
     def Image.extract_identifiers(shapes_and_styles)
-      shapes_and_styles.map { |s| s[/^\w+/] }.uniq - RESERVED_WORDS
+      shapes_and_styles.map { |s| s[/^\w+/] }.uniq - RESERVED_WORDS + ["nil"]
     end
 
     def initialize(spec)
