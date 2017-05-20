@@ -113,7 +113,8 @@ module Ritaa
       end
 
       @shapes
-        .map(&:to_element)
+        .map(&:to_elements)
+        .flatten
         .sort_by { |e| e.attributes["z"].to_i || 0 }
         .each { |e| e.attributes.delete("z") }
         .each { |e| root.add_element(e) }

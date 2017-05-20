@@ -32,7 +32,7 @@ module Ritaa
     def max_x; @points.map { |p| Image::Point.new(p).x }.max; end
     def max_y; @points.map { |p| Image::Point.new(p).y }.max; end
 
-    def to_element
+    def to_elements
       e = REXML::Element.new("polygon")
       e.attributes["points"] = @points
         .map { |p| "%d,%d" % Image::Point.new(p).to_a }
@@ -47,7 +47,7 @@ module Ritaa
         end
       end
       e.attributes["style"] = styles.join("; ") unless styles.empty?
-      e
+      [e]
     end
   end
 end
