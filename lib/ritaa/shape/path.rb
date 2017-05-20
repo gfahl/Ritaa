@@ -48,7 +48,7 @@ module Ritaa
       styles = []
       @properties.each do |k, v|
         case k
-        when :id
+        when :id, :z
           e.attributes[k.to_s] = @properties[k].to_s
         else
           styles << "%s: %s" % [k, v]

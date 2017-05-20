@@ -27,6 +27,10 @@ module Ritaa
       shape.image = self
     end
 
+    def get_shape(id)
+      @shapes.find { |shape| shape.properties[:id] == id }
+    end
+
     def height
       @properties[:height] || @shapes.map(&:max_y).max
     end
@@ -39,18 +43,26 @@ module Ritaa
     def parse_shapes_and_styles(shapes_and_styles)
       shapes_and_styles.each do |s|
         case s
-          when /^(L\d+) (.*)/
-            h_shape, h_style = JSON.parse($2, symbolize_names: true)
-              .partition { |k, v| [:x1, :y1, :x2, :y2].include?(k) }
+          when /^([LP]\d+) (.*)/
+            id, other_attributes = $1, $2
+            shape_class, shape_attributes =
+              case id[0]
+              when "L"
+                [Object.const_get("Ritaa").const_get("Line"), [:x1, :y1, :x2, :y2, :z]]
+              when "P"
+                [Object.const_get("Ritaa").const_get("Polygon"), [:points, :z]]
+              end
+            h_shape, h_style = JSON.parse(other_attributes, symbolize_names: true)
+              .partition { |k, v| shape_attributes.include?(k) }
               .map(&:to_h)
-            add_shape(Line.new(h_shape.merge(id: $1)))
-            @styles["#" + $1] = h_style
-          when /^(P\d+) (.*)/
-            h_shape, h_style = JSON.parse($2, symbolize_names: true)
-              .partition { |k, v| [:points].include?(k) }
-              .map(&:to_h)
-            add_shape(Polygon.new(h_shape.merge(id: $1))) if h_shape[:points]
-            @styles["#" + $1] = h_style
+            shape = get_shape(id)
+            if shape
+              shape.properties.merge!(h_shape)
+            else
+              add_shape(shape_class.new(h_shape.merge(id: $1)))
+            end
+            @styles["#" + id] ||= {}
+            @styles["#" + id].merge!(h_style)
           when /^(line|polyline|polygon|path) (.*)/
             klass = Object.const_get("Ritaa").const_get($1.capitalize)
             add_shape(klass.new(JSON.parse($2, symbolize_names: true)))
@@ -100,7 +112,11 @@ module Ritaa
         end
       end
 
-      @shapes.each { |shape| root.add_element(shape.to_element) }
+      @shapes
+        .map(&:to_element)
+        .sort_by { |e| e.attributes["z"].to_i || 0 }
+        .each { |e| e.attributes.delete("z") }
+        .each { |e| root.add_element(e) }
 
       res = ""; doc.write(res, 2); res
     end

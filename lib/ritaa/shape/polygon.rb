@@ -1,7 +1,5 @@
 module Ritaa
   class Polygon < Shape
-    attr_reader :properties
-
     def initialize(arg = nil)
       @properties, @points =
         case arg
@@ -42,7 +40,7 @@ module Ritaa
       styles = []
       @properties.each do |k, v|
         case k
-        when :id, :class
+        when :id, :class, :z
           e.attributes[k.to_s] = @properties[k].to_s
         else
           styles << "%s: %s" % [k, v]

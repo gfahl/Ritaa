@@ -1,5 +1,6 @@
 module Ritaa
   class Shape # abstract
+    attr_reader :properties
     attr_writer :image
     def max_x; raise "%p must implement method %p" % [self.class, __method__]; end
     def max_y; raise "%p must implement method %p" % [self.class, __method__]; end
