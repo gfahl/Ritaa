@@ -34,20 +34,37 @@ module Ritaa
 
     def to_elements
       e = REXML::Element.new("polygon")
+      res = [e]
       e.attributes["points"] = @points
         .map { |p| "%d,%d" % Image::Point.new(p).to_a }
         .join(" ")
+
       styles = []
       @properties.each do |k, v|
         case k
         when :id, :class, :z
           e.attributes[k.to_s] = @properties[k].to_s
+        when :"drop-shadow" then nil
         else
           styles << "%s: %s" % [k, v]
         end
       end
       e.attributes["style"] = styles.join("; ") unless styles.empty?
-      [e]
+
+      drop_shadow_style = @image.get_drop_shadow_class(
+        @properties[:"drop-shadow"],
+        @properties[:id],
+        @properties[:class],
+        :polygon)
+      if drop_shadow_style
+        _e = REXML::Element.new("polygon")
+        _e.attributes["points"] = e.attributes["points"]
+        _e.attributes["class"] = drop_shadow_style
+        _e.attributes["z"] = (e.attributes["z"] || 0).to_i - 1
+        res << _e
+      end
+
+      res
     end
   end
 end

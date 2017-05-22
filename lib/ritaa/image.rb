@@ -3,7 +3,7 @@ module Ritaa
     RESERVED_WORDS = %w(
       line path polygon polyline
       lines paths polygons polylines
-      edge image nil)
+      edge image nil drop-shadow)
 
     def Image.extract_identifiers(shapes_and_styles)
       shapes_and_styles.map { |s| s[/^\w+/] }.uniq - RESERVED_WORDS + ["nil"]
@@ -19,12 +19,27 @@ module Ritaa
         .each { |shape| add_shape(shape) }
       @properties = {}
       @styles = { line: {}, polygon: {}, polyline: {}, path: {} }
+      @drop_shadow_styles = {} # id => Hash
       parse_shapes_and_styles(shapes_and_styles)
     end
 
     def add_shape(shape)
       @shapes << shape
       shape.image = self
+    end
+
+    def get_drop_shadow_class(dss_id_from_shape, id, klass, shape_type)
+      dss_id =
+        dss_id_from_shape ||
+        (id && @styles["#" + id][:"drop-shadow"]) ||
+        (klass && @styles["." + klass][:"drop-shadow"]) ||
+        @styles[:polygon][:"drop-shadow"]
+      if dss_id
+        if dss_id == true
+          dss_id = @drop_shadow_styles.keys.min
+        end
+        "dropshadow%d" % dss_id
+      end
     end
 
     def get_shape(id)
@@ -79,6 +94,11 @@ module Ritaa
           when /^(line|polyline|polygon|path)s (.*)/
             h = JSON.parse($2, symbolize_names: true)
             @styles[$1.to_sym].merge!(h)
+          when /^drop-shadow (.*)/
+            h = JSON.parse($1, symbolize_names: true)
+            id = h.delete(:id)
+            id = id ? id.to_i : 0
+            @drop_shadow_styles[id] = h
           when /^([a-z]\w*) (.*)/
             h = JSON.parse($2, symbolize_names: true)
             @styles["." + $1] = h
@@ -98,18 +118,34 @@ module Ritaa
       root.attributes["height"] = total_height.to_s
       root.attributes["viewBox"] =
         "%d %d %d %d" % [-margin_left, -margin_top, total_width, total_height]
-      h = @properties.reject { |k, v| k =~ /^margin\-/ }
+      h = @properties.reject { |k, v| k =~ /^margin\-/ || k == :"drop-shadow" }
       unless h.empty?
         root.attributes["style"] = h.map { |k, v| "%s: %s" % [k, v] }.join("; ")
       end
 
-      e = REXML::Element.new("style")
-      root.add_element(e)
+      elm_style = REXML::Element.new("style")
+      root.add_element(elm_style)
       @styles.each do |shape_type, h|
         unless h.empty?
-          s = "%s { %s }" % [shape_type, h.map { |k, v| "%s: %s" % [k, v] }.join("; ")]
-          e.add_text(REXML::Text.new(s))
+          s = "%s { %s }" % [shape_type,
+            h.reject { |k, v| k == :"drop-shadow" }.map { |k, v| "%s: %s" % [k, v] }.join("; ")]
+          elm_style.add_text(REXML::Text.new(s))
         end
+      end
+
+      @drop_shadow_styles.each do |id, h|
+        elm_filter = REXML::Element.new("filter")
+        root.insert_before(elm_style, elm_filter)
+        elm_filter.attributes["id"] = "drop_shadow_%d" % id
+        e = REXML::Element.new("feGaussianBlur")
+        elm_filter.add_element(e)
+        e.attributes["stdDeviation"] = h[:blur]
+        e = REXML::Element.new("feOffset")
+        elm_filter.add_element(e)
+        e.attributes["dx"] = e.attributes["dy"] = h[:offset]
+        elm_style.add_text(REXML::Text.new(
+          ".dropshadow%d { fill: %s; stroke: none; filter: url(#drop_shadow_%d) }" %
+          [id, h[:fill], id]))
       end
 
       @shapes
