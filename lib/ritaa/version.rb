@@ -1,5 +1,11 @@
 module Ritaa
-  VERSION = '0.2.0'
+  VERSION = '0.3.0'
+
+  ########## 0.3.0
+  #
+  # Drop-shadows can be added to polygons
+  # Faces which should not generate a polygon can be excluded
+  # Shapes can be given a z-value which will determine their relative position among shapes
 
   ########## 0.2.0
   #
