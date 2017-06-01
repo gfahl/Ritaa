@@ -6,7 +6,7 @@ module Ritaa
       edge image nil drop-shadow)
 
     def Image.extract_identifiers(shapes_and_styles)
-      shapes_and_styles.map { |s| s[/^\w+/] }.uniq - RESERVED_WORDS + ["nil"]
+      shapes_and_styles.map { |s| s[/^\w+/] }.compact.uniq - RESERVED_WORDS + ["nil"]
     end
 
     def initialize(spec)
@@ -50,10 +50,10 @@ module Ritaa
       @properties[:height] || @shapes.map(&:max_y).max
     end
 
-    def margin_bottom; @properties[:"margin-bottom"] || 0; end
-    def margin_left; @properties[:"margin-left"] || 0; end
-    def margin_right; @properties[:"margin-right"] || 0; end
-    def margin_top; @properties[:"margin-top"] || 0; end
+    def margin_bottom; @properties[:"margin-bottom"].to_i || 0; end
+    def margin_left; @properties[:"margin-left"].to_i || 0; end
+    def margin_right; @properties[:"margin-right"].to_i || 0; end
+    def margin_top; @properties[:"margin-top"].to_i || 0; end
 
     def parse_shapes_and_styles(shapes_and_styles)
       shapes_and_styles.each do |s|
@@ -102,6 +102,8 @@ module Ritaa
           when /^([a-z]\w*) (.*)/
             h = JSON.parse($2, symbolize_names: true)
             @styles["." + $1] = h
+          when /^((?:"[^"]*" )+)(.*)/
+            nil
           else raise "Unexpected entry: %s" % s
         end
       end
