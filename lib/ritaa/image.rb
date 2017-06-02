@@ -164,7 +164,7 @@ module Ritaa
     def total_width; margin_left + width + margin_right; end
 
     def width
-      @properties[:height] || @shapes.map(&:max_x).max
+      @properties[:width] || @shapes.map(&:max_x).max
     end
 
     class Point < Ritaa::Point
