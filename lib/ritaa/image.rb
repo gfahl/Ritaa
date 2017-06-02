@@ -84,12 +84,21 @@ module Ritaa
           when /^image (.*)/
             h = JSON.parse($1, symbolize_names: true)
             margin = h.delete(:margin)
-            h.merge!(
-              "margin-bottom": margin,
-              "margin-left": margin,
-              "margin-right": margin,
-              "margin-top": margin
-              ) if margin
+            if margin
+              margins = margin.split
+              margins =
+                case margins.size
+                when 1 then margins * 4
+                when 2 then margins * 2
+                when 3 then margins << margins[1]
+                else margins[0..3]
+                end
+              h.merge!(
+                "margin-top": margins[0],
+                "margin-right": margins[1],
+                "margin-bottom": margins[2],
+                "margin-left": margins[3])
+            end
             @properties.merge!(h)
           when /^(line|polyline|polygon|path|rect)s (.*)/
             h = JSON.parse($2, symbolize_names: true)
