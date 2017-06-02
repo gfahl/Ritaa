@@ -18,7 +18,7 @@ module Ritaa
         .to_shapes
         .each { |shape| add_shape(shape) }
       @properties = {}
-      @styles = { line: {}, polygon: {}, polyline: {}, path: {} }
+      @styles = { line: {}, polygon: {}, polyline: {}, path: {}, rect: {} }
       @drop_shadow_styles = {} # id => Hash
       parse_shapes_and_styles(shapes_and_styles)
     end
@@ -78,7 +78,7 @@ module Ritaa
             end
             @styles["#" + id] ||= {}
             @styles["#" + id].merge!(h_style)
-          when /^(line|polyline|polygon|path) (.*)/
+          when /^(line|polyline|polygon|path|rect) (.*)/
             klass = Object.const_get("Ritaa").const_get($1.capitalize)
             add_shape(klass.new(JSON.parse($2, symbolize_names: true)))
           when /^image (.*)/
@@ -91,7 +91,7 @@ module Ritaa
               "margin-top": margin
               ) if margin
             @properties.merge!(h)
-          when /^(line|polyline|polygon|path)s (.*)/
+          when /^(line|polyline|polygon|path|rect)s (.*)/
             h = JSON.parse($2, symbolize_names: true)
             @styles[$1.to_sym].merge!(h)
           when /^drop-shadow (.*)/

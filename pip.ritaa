@@ -18,3 +18,5 @@ texts {"text-anchor": "middle", "font-size": "18pt"}
 "1" "3" "5" {"class": "red"}
 "0" "2" "4" {"class": "blu"}
 "0" {"font-size": "24pt"}
+rects {"fill": "#abba74", "stroke-width": "3pt"}
+rect {"x": 4, "y": 1, "width": 15, "height": 6, "stroke": "blue"}
