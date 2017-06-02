@@ -1,5 +1,5 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<svg xmlns='http://www.w3.org/2000/svg' version='1.1' width='335' height='130' viewBox='0 -10 335 130' style='background: #cdf'>
+<svg xmlns='http://www.w3.org/2000/svg' version='1.1' width='335' height='130' viewBox='0 -10 335 130'>
   <style>
     line { stroke-width: 2pt }
     rect { fill: #abba74; stroke-width: 3pt }
@@ -9,6 +9,7 @@
     .red { stroke: red; fill: blue; alignment-baseline: baseline }
     .texts { text-anchor: middle; font-size: 18pt }
   </style>
+  <rect x='0' y='-10' width='335' height='130' style='fill: #cdf'/>
   <polygon points='290,50 315,60 295,100' style='fill: #fbb; stroke: magenta'/>
-  <rect x='20' y='10' width='75' height='60' style='stroke: blue'/>
+  <rect x='0' y='0' width='75' height='60' style='stroke: blue'/>
 </svg>

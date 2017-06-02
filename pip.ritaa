@@ -19,4 +19,4 @@ texts {"text-anchor": "middle", "font-size": "18pt"}
 "0" "2" "4" {"class": "blu"}
 "0" {"font-size": "24pt"}
 rects {"fill": "#abba74", "stroke-width": "3pt"}
-rect {"x": 4, "y": 1, "width": 15, "height": 6, "stroke": "blue"}
+rect {"x": 0, "y": 0, "width": 15, "height": 6, "stroke": "blue"}

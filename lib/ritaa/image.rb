@@ -129,7 +129,7 @@ module Ritaa
       root.attributes["height"] = total_height.to_s
       root.attributes["viewBox"] =
         "%d %d %d %d" % [-margin_left, -margin_top, total_width, total_height]
-      h = @properties.reject { |k, v| k =~ /^margin\-/ || k == :"drop-shadow" }
+      h = @properties.reject { |k, v| k =~ /^margin\-/ || k == :"drop-shadow" || k == :background }
       unless h.empty?
         root.attributes["style"] = h.map { |k, v| "%s: %s" % [k, v] }.join("; ")
       end
@@ -159,12 +159,23 @@ module Ritaa
           [id, h[:fill], id]))
       end
 
-      @shapes
+      elements = @shapes
         .map(&:to_elements)
         .flatten
         .sort_by { |e| e.attributes["z"].to_i || 0 }
-        .each { |e| e.attributes.delete("z") }
-        .each { |e| root.add_element(e) }
+      if @properties[:background]
+        e = REXML::Element.new("rect")
+        e.attributes["x"] = -margin_left
+        e.attributes["y"] = -margin_top
+        e.attributes["width"] = total_width
+        e.attributes["height"] = total_height
+        e.attributes["style"] = "fill: %s" % @properties[:background]
+        elements.unshift(e)
+      end
+      elements.each do |e|
+        e.attributes.delete("z")
+        root.add_element(e)
+      end
 
       res = ""; doc.write(res, 2); res
     end
