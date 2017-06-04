@@ -15,13 +15,13 @@ module Ritaa
         end
     end
 
-    def max_x; @points.map { |p| Image::Point.new(p).x }.max; end
-    def max_y; @points.map { |p| Image::Point.new(p).y }.max; end
+    def max_x; @points.map { |p| @image.convert_x_a2i(p) }.max; end
+    def max_y; @points.map { |p| @image.convert_y_a2i(p) }.max; end
 
     def to_elements
       e = REXML::Element.new("polyline")
       e.attributes["points"] = @points
-        .map { |p| "%d,%d" % Image::Point.new(p).to_a }
+        .map { |p| "%d,%d" % @image.convert_point_a2i(p).to_a }
         .join(" ")
       styles = []
       @properties.each do |k, v|

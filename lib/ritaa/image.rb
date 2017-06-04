@@ -180,6 +180,18 @@ module Ritaa
       res = ""; doc.write(res, 2); res
     end
 
+    def convert_point_a2i(p)
+      Point.new(convert_x_a2i(p), convert_y_a2i(p))
+    end
+
+    def convert_x_a2i(p)
+      p.x * 5
+    end
+
+    def convert_y_a2i(p)
+      p.y * 10
+    end
+
     def total_height; margin_top + height + margin_bottom; end
     def total_width; margin_left + width + margin_right; end
 
@@ -187,10 +199,6 @@ module Ritaa
       @properties[:width] || @shapes.map(&:max_x).max
     end
 
-    class Point < Ritaa::Point
-      def initialize(ascii_diagram_point)
-        super(ascii_diagram_point.x * 5, ascii_diagram_point.y * 10)
-      end
-    end
+    class Point < Ritaa::Point; end
   end
 end

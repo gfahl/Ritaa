@@ -35,13 +35,13 @@ module Ritaa
         end
     end
 
-    def max_x; @lines.flatten(1).map { |p| Image::Point.new(p).x }.max; end
-    def max_y; @lines.flatten(1).map { |p| Image::Point.new(p).y }.max; end
+    def max_x; @lines.flatten(1).map { |p| @image.convert_x_a2i(p) }.max; end
+    def max_y; @lines.flatten(1).map { |p| @image.convert_y_a2i(p) }.max; end
 
     def to_elements
       e = REXML::Element.new("path")
       e.attributes["d"] = @lines
-        .map { |points| points.map { |p| Image::Point.new(p).to_a } }
+        .map { |points| points.map { |p| @image.convert_point_a2i(p).to_a } }
         .map { |first, *rest| ["M %d,%d" % first] + rest.map { |x, y| "L %d,%d" % [x, y] } }
         .flatten
         .join(" ")
