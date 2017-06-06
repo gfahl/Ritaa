@@ -20,6 +20,7 @@ module Ritaa
       @properties = {}
       @styles = { line: {}, polygon: {}, polyline: {}, path: {}, rect: {} }
       @drop_shadow_styles = {} # id => Hash
+      @size_manager = SizeManager.new(10, 5)
       parse_shapes_and_styles(shapes_and_styles)
     end
 
@@ -58,6 +59,7 @@ module Ritaa
     def parse_shapes_and_styles(shapes_and_styles)
       shapes_and_styles.each do |s|
         case s
+          when /size (.*)/ then @size_manager.add_sizes(JSON.parse($1))
           when /^([LP]\d+) (.*)/
             id, other_attributes = $1, $2
             shape_class, shape_attributes =
@@ -180,17 +182,9 @@ module Ritaa
       res = ""; doc.write(res, 2); res
     end
 
-    def convert_point_a2i(p)
-      Point.new(convert_x_a2i(p), convert_y_a2i(p))
-    end
-
-    def convert_x_a2i(p)
-      p.x * 5
-    end
-
-    def convert_y_a2i(p)
-      p.y * 10
-    end
+    def convert_point_a2i(p); @size_manager.convert_point_a2i(p); end
+    def convert_x_a2i(p); @size_manager.convert_x_a2i(p); end
+    def convert_y_a2i(p); @size_manager.convert_y_a2i(p); end
 
     def total_height; margin_top + height + margin_bottom; end
     def total_width; margin_left + width + margin_right; end
