@@ -19,14 +19,14 @@ module Ritaa
       # nodes
       dia.each.with_index do |row, y|
         row.each_char.with_index do |ch, x|
-          g.add_node(Point.new(x, y)) if ch == "+"
+          g.add_node(Point.new(x, y)) if ch =~ /[\+<>\^v]/
         end
       end
       sz = g.nodes.size
 
       # horizontal edges
       g.nodes[0..sz - 2].zip(g.nodes[1..sz - 1]).each do |n1, n2|
-        if n1.y == n2.y && dia[n1.y][n1.x..n2.x] =~ /^\+\-+\+$/
+        if n1.y == n2.y && dia[n1.y][n1.x..n2.x].gsub("x", "-") =~ /^([+<])\-+([+>])$/
           g.add_line(n1, n2)
         end
       end
@@ -37,7 +37,7 @@ module Ritaa
         .map(&:join)
       _nodes = g.nodes.sort_by { |node| [node.x, node.y] }
       _nodes[0..sz - 2].zip(_nodes[1..sz - 1]).each do |n1, n2|
-        if n1.x == n2.x && transposed_dia[n1.x][n1.y..n2.y] =~ /^\+\|+\+$/
+        if n1.x == n2.x && transposed_dia[n1.x][n1.y..n2.y].gsub("x", "|") =~ /^([+^])\|+([+v])$/
           g.add_line(n1, n2)
         end
       end

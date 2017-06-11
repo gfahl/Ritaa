@@ -1,14 +1,20 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<svg xmlns='http://www.w3.org/2000/svg' version='1.1' width='355' height='270' viewBox='0 -10 355 270'>
+<svg xmlns='http://www.w3.org/2000/svg' version='1.1' width='395' height='270' viewBox='0 -10 395 270'>
   <style>
-    line { stroke-width: 2pt }
+    line { stroke-width: 2pt; stroke: black }
     rect { fill: #abba74; stroke-width: 3pt }
     .arrow { style: triangle; size: 10pt }
     .blu { stroke: blue; fill: blue; alignment-baseline: hanging }
     .red { stroke: red; fill: blue; alignment-baseline: baseline }
     .texts { text-anchor: middle; font-size: 18pt }
   </style>
-  <rect x='0' y='-10' width='355' height='270' style='fill: #cdf'/>
-  <polygon points='310,150 335,190 315,240' style='fill: #fbb; stroke: magenta'/>
+  <rect x='0' y='-10' width='395' height='270' style='fill: #cdf'/>
   <rect x='0' y='0' width='85' height='190' style='stroke: blue'/>
+  <line x1='64' y1='110' x2='113' y2='110'/>
+  <line x1='120' y1='110' x2='165' y2='110'/>
+  <line x1='170' y1='110' x2='265' y2='110'/>
+  <line x1='270' y1='110' x2='295' y2='110'/>
+  <line x1='300' y1='110' x2='375' y2='110'/>
+  <polygon points='310,150 335,190 315,240' style='fill: #fbb; stroke: magenta'/>
+  <line x1='0' y1='110' x2='57' y2='110'/>
 </svg>
