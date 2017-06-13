@@ -1,7 +1,7 @@
 module Ritaa
   class DirectedGraph < Graph
     def initialize(edges = [])
-      super { |n1, n2| add_arc(n1, n2); add_arc(n2, n1) }
+      super { |n1, n2, m1, m2| add_arc(n1, n2); add_arc(n2, n1) }
     end
 
     def add_arc(n1, n2)

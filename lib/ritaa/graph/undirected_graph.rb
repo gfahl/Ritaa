@@ -1,11 +1,15 @@
 module Ritaa
   class UndirectedGraph < Graph
     def initialize(edges = [])
-      super { |n1, n2| add_line(n1, n2) }
+      super { |n1, n2, m1, m2| add_line(n1, n2, m1, m2) }
     end
 
-    def add_line(n1, n2)
-      line = Line.new(n1, n2)
+    def add_line(n1, n2, marker1 = nil, marker2 = nil)
+      marker1 = nil if marker1 == '+'
+      marker1 = :arrow if marker1 =~ /[<>\^v]/
+      marker2 = nil if marker2 == '+'
+      marker2 = :arrow if marker2 =~ /[<>\^v]/
+      line = Line.new(n1, n2, marker1, marker2)
       n1.lines << line
       n2.lines << line
       @edges << line
@@ -54,7 +58,7 @@ module Ritaa
     end
 
     class Line < Edge
-      def inspect; "[E:%p-%p]" % @nodes; end
+      def inspect; "[E:%p%s-%p%s]" % [@nodes[0], @markers[0], @nodes[1], @markers[1]]; end
 
       def other_node(node)
         @nodes[0] == node ? @nodes[1] : @nodes[0]

@@ -27,7 +27,7 @@ module Ritaa
       # horizontal edges
       g.nodes[0..sz - 2].zip(g.nodes[1..sz - 1]).each do |n1, n2|
         if n1.y == n2.y && dia[n1.y][n1.x..n2.x].gsub("x", "-") =~ /^([+<])\-+([+>])$/
-          g.add_line(n1, n2)
+          g.add_line(n1, n2, $1, $2)
         end
       end
       # vertical edges
@@ -38,7 +38,7 @@ module Ritaa
       _nodes = g.nodes.sort_by { |node| [node.x, node.y] }
       _nodes[0..sz - 2].zip(_nodes[1..sz - 1]).each do |n1, n2|
         if n1.x == n2.x && transposed_dia[n1.x][n1.y..n2.y].gsub("x", "|") =~ /^([+^])\|+([+v])$/
-          g.add_line(n1, n2)
+          g.add_line(n1, n2, $1, $2)
         end
       end
       # additional edges specified outside diagram
@@ -46,7 +46,7 @@ module Ritaa
         h = JSON.parse(s[/^edge (.*)/, 1], symbolize_names: true)
         n1 = g.get_or_add_node(Point.new(h[:x1], h[:y1]))
         n2 = g.get_or_add_node(Point.new(h[:x2], h[:y2]))
-        g.add_line(n1, n2)
+        g.add_line(n1, n2, h[:marker1], h[:marker2])
       end
 
       # split graph into two: one for faces and one for non-faces

@@ -7,9 +7,10 @@ module Ritaa
       @edges = []
       edges.each do |e|
         _n1, _n2 = e.nodes
+        m1, m2 = e.markers
         n1 = get_or_add_node(_n1.point)
         n2 = get_or_add_node(_n2.point)
-        yield n1, n2
+        yield n1, n2, m1, m2
       end
     end
 
@@ -41,10 +42,11 @@ module Ritaa
     end
 
     class Edge # abstract
-      attr_reader :nodes
+      attr_reader :nodes, :markers
 
-      def initialize(node_1, node_2)
+      def initialize(node_1, node_2, marker_1 = nil, marker_2 = nil)
         @nodes = [node_1, node_2]
+        @markers = [marker_1, marker_2]
       end
 
       def inspect; raise "%p must implement method %p" % [self.class, __method__]; end
