@@ -25,6 +25,8 @@ module Ritaa
       styles = []
       @properties.each do |k, v|
         case k
+        when :"arrow-start", :"arrow-end"
+          e.attributes[k.to_s] = v.to_s if v
         when :id, :z
           e.attributes[k.to_s] = @properties[k].to_s
         else

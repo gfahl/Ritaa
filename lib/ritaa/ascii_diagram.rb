@@ -65,7 +65,25 @@ module Ritaa
     end
 
     def to_shapes
-      res = @nonfaces_graph.components.map do |g|
+      res = []
+
+      # for the time being, always translate edges with marker(s) to Line elements
+      # we may want to change this later
+      @nonfaces_graph.lines.dup.each do |line|
+        if line.markers != [nil, nil]
+          res << Line.new(
+            x1: line.nodes[0].x,
+            y1: line.nodes[0].y,
+            x2: line.nodes[1].x,
+            y2: line.nodes[1].y,
+            "arrow-start": line.markers[0] == :arrow,
+            "arrow-end": line.markers[1] == :arrow
+            )
+          @nonfaces_graph.remove_line(line)
+        end
+      end
+
+      res += @nonfaces_graph.components.map do |g|
         case g.nodes.map(&:degree).max
           when 1 then Line
           when 2 then Polyline

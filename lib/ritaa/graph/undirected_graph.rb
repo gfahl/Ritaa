@@ -16,6 +16,14 @@ module Ritaa
       line
     end
 
+    def remove_line(line)
+      line.nodes.each do |node|
+        node.lines.delete(line)
+        @nodes.delete(node) if node.lines.empty?
+      end
+      @edges.delete(line)
+    end
+
     def components
       node_sets = []
       loop do
@@ -48,10 +56,11 @@ module Ritaa
       end
 
       def reachable
-        prev, res = nil, [self]
+        prev, res = [], [self]
         while prev != res do
           prev = res
-          res = res.map(&:neighbors).flatten.uniq
+          res += res.map(&:neighbors).flatten
+          res.uniq!
         end
         res
       end
