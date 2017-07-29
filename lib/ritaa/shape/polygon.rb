@@ -43,7 +43,7 @@ module Ritaa
       @properties.each do |k, v|
         case k
         when :id, :class, :z
-          e.attributes[k.to_s] = @properties[k].to_s
+          e.attributes[k.to_s] = v.to_s
         when :"drop-shadow" then nil
         else
           styles << "%s: %s" % [k, v]

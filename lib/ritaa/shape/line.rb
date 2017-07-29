@@ -28,7 +28,7 @@ module Ritaa
         when :"arrow-start", :"arrow-end"
           e.attributes[k.to_s] = v.to_s if v
         when :id, :z
-          e.attributes[k.to_s] = @properties[k].to_s
+          e.attributes[k.to_s] = v.to_s
         else
           styles << "%s: %s" % [k, v]
         end
