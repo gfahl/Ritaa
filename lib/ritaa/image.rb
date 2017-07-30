@@ -29,7 +29,7 @@ module Ritaa
       shape.image = self
     end
 
-    def get_drop_shadow_class(dss_id_from_shape, id, klass, shape_type)
+    def get_drop_shadow_class(dss_id_from_shape, id, klass)
       dss_id =
         dss_id_from_shape ||
         (id && @styles["#" + id][:"drop-shadow"]) ||

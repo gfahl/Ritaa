@@ -54,8 +54,7 @@ module Ritaa
       drop_shadow_style = @image.get_drop_shadow_class(
         @properties[:"drop-shadow"],
         @properties[:id],
-        @properties[:class],
-        :polygon)
+        @properties[:class])
       if drop_shadow_style
         _e = REXML::Element.new("polygon")
         _e.attributes["points"] = e.attributes["points"]
