@@ -161,10 +161,11 @@ module Ritaa
           [id, h[:fill], id]))
       end
 
+      f = REXML::Formatters::Pretty.new
       elements = @shapes
         .map(&:to_elements)
         .flatten
-        .sort_by { |e| e.attributes["z"].to_i || 0 }
+        .sort_by { |e| s = ""; f.write(e, s); [e.attributes["z"].to_i || 0, s] }
       if @properties[:background]
         e = REXML::Element.new("rect")
         e.attributes["x"] = -margin_left
