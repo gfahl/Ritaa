@@ -20,6 +20,7 @@ module Ritaa
       @properties = {}
       @styles = { line: {}, polygon: {}, polyline: {}, path: {}, rect: {} }
       @drop_shadow_styles = {} # id => Hash
+      @arrow_styles = {} # id => ArrowStyle
       @size_manager = SizeManager.new(10, 5)
       parse_shapes_and_styles(shapes_and_styles)
     end
@@ -27,6 +28,32 @@ module Ritaa
     def add_shape(shape)
       @shapes << shape
       shape.image = self
+    end
+
+    def get_arrow_styles(arrow_start_id_from_shape, arrow_end_id_from_shape, id, klass)
+      a = [
+        arrow_start_id_from_shape,
+        (id && @styles["#" + id][:"arrow-start"]),
+        (klass && @styles["." + klass][:"arrow-start"]),
+        @styles[:line][:"arrow-start"]
+        ].compact
+      start_id = a.first
+      if start_id == true
+        start_id = a.find { |_id| _id != true } || @arrow_styles.keys.min
+      end
+
+      a = [
+        arrow_end_id_from_shape,
+        (id && @styles["#" + id][:"arrow-end"]),
+        (klass && @styles["." + klass][:"arrow-end"]),
+        @styles[:line][:"arrow-end"]
+        ].compact
+      end_id = a.first
+      if end_id == true
+        end_id = a.find { |_id| _id != true } || @arrow_styles.keys.min
+      end
+
+      [start_id, end_id].map { |_id| @arrow_styles[_id] }
     end
 
     def get_drop_shadow_class(dss_id_from_shape, id, klass)
@@ -110,6 +137,10 @@ module Ritaa
             id = h.delete(:id)
             id = id ? id.to_i : 0
             @drop_shadow_styles[id] = h
+          when /^arrow (.*)/
+            h = JSON.parse($1, symbolize_names: true)
+            arrow_style = ArrowStyle.new(h)
+            @arrow_styles[arrow_style.id] = arrow_style
           when /^([a-z]\w*) (.*)/
             h = JSON.parse($2, symbolize_names: true)
             @styles["." + $1] = h
@@ -144,6 +175,10 @@ module Ritaa
             h.reject { |k, v| k == :"drop-shadow" }.map { |k, v| "%s: %s" % [k, v] }.join("; ")]
           elm_style.add_text(REXML::Text.new(s))
         end
+      end
+
+      @arrow_styles.values.map(&:to_elements).flatten.map do |elm_marker|
+        root.insert_before(elm_style, elm_marker)
       end
 
       @drop_shadow_styles.each do |id, h|

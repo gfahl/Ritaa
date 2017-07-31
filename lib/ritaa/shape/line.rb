@@ -20,20 +20,35 @@ module Ritaa
     def to_elements
       e = REXML::Element.new("line")
       p1, p2 = @points.map { |p| @image.convert_point_a2i(p) }
+      arrow_styles = @image.get_arrow_styles(
+        @properties[:"arrow-start"],
+        @properties[:"arrow-end"],
+        @properties[:id],
+        @properties[:class])
+      p1 = arrow_styles[0].adjust_end_point(p1, p2) if arrow_styles[0]
+      p2 = arrow_styles[1].adjust_end_point(p2, p1) if arrow_styles[1]
       e.attributes["x1"], e.attributes["y1"] = p1.to_a
       e.attributes["x2"], e.attributes["y2"] = p2.to_a
+
+      if arrow_styles[0]
+        e.attributes["marker-start"] = "url(#arrow_%d_start)" % arrow_styles[0].id
+      end
+      if arrow_styles[1]
+        e.attributes["marker-end"] = "url(#arrow_%d_end)" % arrow_styles[1].id
+      end
+
       styles = []
       @properties.each do |k, v|
         case k
-        when :"arrow-start", :"arrow-end"
-          e.attributes[k.to_s] = v.to_s if v
         when :id, :z
           e.attributes[k.to_s] = v.to_s
+        when :"arrow-start", :"arrow-end" then nil
         else
           styles << "%s: %s" % [k, v]
         end
       end
       e.attributes["style"] = styles.join("; ") unless styles.empty?
+
       [e]
     end
   end

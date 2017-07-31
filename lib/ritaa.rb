@@ -1,6 +1,7 @@
 require_relative 'ritaa/version'
 
 require_relative 'ritaa/point'
+require_relative 'ritaa/arrow_style'
 require_relative 'ritaa/image'
 require_relative 'ritaa/ascii_diagram'
 require_relative 'ritaa/size_manager'
