@@ -25,8 +25,10 @@ module Ritaa
       sz = g.nodes.size
 
       # horizontal edges
-      g.nodes[0..sz - 2].zip(g.nodes[1..sz - 1]).each do |n1, n2|
+      (0..3).map { |i| g.nodes.rotate(i) }.transpose.each do |n0, n1, n2, n3|
         if n1.y == n2.y && dia[n1.y][n1.x..n2.x].gsub("x", "-") =~ /^([+<])\-+([+>])$/
+          n1 = n0 if n0.y == n1.y && dia[n1.y][n0.x..n1.x] == "+<"
+          n2 = n3 if n2.y == n3.y && dia[n2.y][n2.x..n3.x] == ">+"
           g.add_line(n1, n2, $1, $2)
         end
       end
@@ -36,8 +38,10 @@ module Ritaa
         .transpose
         .map(&:join)
       _nodes = g.nodes.sort_by { |node| [node.x, node.y] }
-      _nodes[0..sz - 2].zip(_nodes[1..sz - 1]).each do |n1, n2|
+      (0..3).map { |i| _nodes.rotate(i) }.transpose.each do |n0, n1, n2, n3|
         if n1.x == n2.x && transposed_dia[n1.x][n1.y..n2.y].gsub("x", "|") =~ /^([+^])\|+([+v])$/
+          n1 = n0 if n0.x == n1.x && transposed_dia[n1.x][n0.y..n1.y] == "+^"
+          n2 = n3 if n2.x == n3.x && transposed_dia[n2.x][n2.y..n3.y] == "v+"
           g.add_line(n1, n2, $1, $2)
         end
       end
