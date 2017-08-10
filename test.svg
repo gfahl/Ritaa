@@ -15,6 +15,8 @@
     polygon { fill: #ccc }
     polyline { fill: none }
     path { fill: none }
+    text { alignment-baseline: middle; font-size: 8pt; stroke: none; fill: red;
+    font-family: Courier; kerning: 5 }
     #L1 { stroke: red }
     #L3 { stroke: green; stroke-width: 5 }
     .grn { fill: #3c8 }
@@ -81,8 +83,11 @@
   <polyline points='175,280 175,310 200,310 225,310 225,280'/>
   <polyline points='285,190 300,180 285,170 300,160 285,150' style='stroke-width: 5; stroke: #abba74'/>
   <polyline points='300,210 300,230 300,250 300,270'/>
-  <text x='235' y='260'>
-    oy|oy
+  <text x='150' y='390' style='font-family: Arial; fill: white; stroke: green; font-size: 28pt; letter-spacing: 5'>
+    hello
+  </text>
+  <text x='150' y='420' style='font-family: Arial; fill: black'>
+    foo fie fum
   </text>
   <text x='270' y='280'>
     |
@@ -93,26 +98,14 @@
   <text x='275' y='270'>
     -----
   </text>
-  <text x='300' y='180'>
+  <text x='300' y='190'>
     +
   </text>
-  <text x='325' y='290'>
-    hello
-  </text>
-  <text x='325' y='310'>
-    foo fie fum
-  </text>
-  <text x='35' y='220'>
+  <text x='35' y='220' style='font-family: Arial; fill: black'>
     foo
   </text>
-  <text x='35' y='230'>
+  <text x='35' y='230' style='font-family: Arial; fill: black'>
     fie fum
-  </text>
-  <text x='80' y='230'>
-    oy
-  </text>
-  <text x='95' y='230'>
-    oy
   </text>
   <line x1='100' y1='10' x2='75' y2='40' id='L1'/>
   <line x1='25' y1='10' x2='60' y2='40'/>

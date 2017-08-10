@@ -16,15 +16,15 @@
 +     +-----+     +-----+     +-----+     +-----+     +
 |     |           |org  |     |           |           |
 |     |           |     |     |           |           |
-+     +     +-----+     +     +-----+-----+-----+     +     +
-|     |     |           |           |           |     |
++     +     +-----+     +     +-----+-----+-----+     +
+|     |     |           |           |           |     |     +
 |     |     |           |           |           |     |
 +     +-----+     +-----+     +-----+     +-----+     +     +
 |     |foo        |           |org  |     |           |     |
-|     |fie fum  oy|oy         |     |     |           |     +
+|     |fie fum    |           |     |     |           |     +
 +     +     +-----+-----+-----+     +     +-----+-----+     |
 |     |     |                       |                       +
-|     |     |                       |          oy|oy        |
+|     |     |                       |                       |
 +-----+-----+-----+-----+-----+-----+                  -----+
                      + +  ^   +    +         +    +   |     +
 <--------><--------->| |  |   |    |         |    |   +     |
@@ -66,5 +66,9 @@ line {"x1": 20, "y1": 40, "x2": 28, "y2": 43, "arrow-start": true}
 line {"x1": 8, "y1": 44, "x2": 0, "y2": 43, "arrow-start": true}
 line {"x1": 18, "y1": 45, "x2": 10, "y2": 43, "arrow-start": true}
 line {"x1": 28, "y1": 46, "x2": 20, "y2": 43, "arrow-start": true}
-text {"x": 65, "y": 29, "text": "hello"}
-text {"x": 65, "y": 31, "text": "foo fie fum"}
+text {"x": 30, "y": 39, "text": "hello"}
+text {"x": 30, "y": 42, "text": "foo fie fum"}
+texts {"alignment-baseline": "middle", "font-size": "8pt", "stroke": "none", "fill": "red", "font-family": "Courier", "kerning": 5}
+/\w/ {"font-family": "Arial"}
+"hello" {"fill": "white", "stroke": "green", "font-size": "28pt", "letter-spacing": 5}
+/^f/ {"fill": "black"}

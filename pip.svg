@@ -14,7 +14,7 @@
   </marker>
   <style>
     line { stroke-width: 1pt; stroke: black }
-    text { text-anchor: middle; font-size: 18pt }
+    text { text-anchor: middle; font-size: 18pt; stroke-width: 0 }
     .blu { stroke: blue; fill: blue; alignment-baseline: hanging }
     .red { stroke: red; fill: red; alignment-baseline: baseline }
   </style>

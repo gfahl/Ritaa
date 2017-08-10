@@ -1,5 +1,15 @@
 module Ritaa
-  VERSION = '0.3.0'
+  VERSION = '0.4.0'
+
+  ########## 0.4.0
+  #
+  # Lines can have arrows
+  # Lines can have id/class identifiers
+  # Row and column sizes in the ascii diagram can be variying
+  # The image can have a background colour
+  # Recognize text in the ascii diagram and show in the image
+  # New shape types: Rect, Text
+  # Margin sizes can now be specified using 1-4 values a la CSS
 
   ########## 0.3.0
   #
@@ -9,7 +19,7 @@ module Ritaa
 
   ########## 0.2.0
   #
-  # Recognize identifiers inside polygons
+  # Recognize id/class identifiers inside polygons
   #
   # An identifier becomes an svg *id* attribute if it starts with an upper-case letter
   # An identifier becomes an svg *class* attribute if it starts with a lower-case letter
