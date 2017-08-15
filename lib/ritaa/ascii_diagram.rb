@@ -3,11 +3,11 @@ module Ritaa
     def initialize(dia, addendum, identifiers)
       @identifiers = []
       identifiers.each do |id|
-        regex = Regexp.new(id + "\\W")
+        regex = Regexp.new("\\W" + id + "\\W")
         dia.each.with_index do |s, row|
           col = -1
           loop do
-            col = (s + " ").index(regex, col + 1)
+            col = (" " + s + " ").index(regex, col + 1)
             break unless col
             @identifiers << [col, row, id]
           end
