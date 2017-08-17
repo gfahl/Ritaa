@@ -14,6 +14,8 @@ module Ritaa
         end
     end
 
+    def find_identifier(identifiers); nil; end
+
     def max_x; @points.map { |p| @image.convert_x_a2i(p) }.max; end
     def max_y; @points.map { |p| @image.convert_y_a2i(p) }.max; end
 

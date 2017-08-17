@@ -12,6 +12,8 @@ module Ritaa
         end
     end
 
+    def find_identifier(identifiers); nil; end
+
     def max_x; @image.convert_x_a2i(@bottom_right); end
     def max_y; @image.convert_y_a2i(@bottom_right); end
 

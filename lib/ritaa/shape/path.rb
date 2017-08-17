@@ -35,6 +35,8 @@ module Ritaa
         end
     end
 
+    def find_identifier(identifiers); nil; end
+
     def max_x; @lines.flatten(1).map { |p| @image.convert_x_a2i(p) }.max; end
     def max_y; @lines.flatten(1).map { |p| @image.convert_y_a2i(p) }.max; end
 

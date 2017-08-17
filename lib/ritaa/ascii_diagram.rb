@@ -1,5 +1,6 @@
 module Ritaa
   class AsciiDiagram
+
     def initialize(dia, addendum, identifiers)
       @identifiers = []
       identifiers.each do |id|
@@ -113,18 +114,17 @@ module Ritaa
           break if next_arc == start_arc
           arc = next_arc
         end
-        if angle_sum < g.nodes.size * 180
-          polygon = Polygon.new(g)
-          s = polygon.find_identifier(@identifiers)
-          case s
-            when /^[A-Z]/ then polygon.properties[:id] = s
-            when /^[a-z]/ then polygon.properties[:class] = s
-          end
-          res << polygon unless s == "nil"
-        end
+        res << Polygon.new(g) if angle_sum < g.nodes.size * 180
       end
 
-      res
+      res.select do |shape|
+        s = shape.find_identifier(@identifiers)
+        case s
+          when /^[A-Z]/ then shape.properties[:id] = s
+          when /^[a-z]/ then shape.properties[:class] = s
+        end
+        s != "nil"
+      end
     end
 
     class Point < Ritaa::Point; end
