@@ -1,22 +1,21 @@
                                                                                           
                                                                                           
                                                                                           
-      blu      1         blu           3           blu         5                          
-+------x--->+----x->+-----x-->+-----x------------>+-x-->+----------x--->
-  0             red     2          red               4            red                     
+      blu      1       blu             3           blu        5                         
++---------->+------>+-------->+------------------>+---->+------------>+
+  0           red       2             red            4       red                        
                                                                                           
                                                                                           
                                                                                           
-size {"row": "10pt", "column": "5pt", "r0-1,6-7": "20pt", "r1-3,4-6": "80pt", "c10-20": "70pt"}
-arrow {"style": "triangle", "size": "10pt"}
-image {"margin": "10pt 20pt 20pt 0pt", "background": "#cdf"}
-lines {"stroke-width": "2pt", "stroke": "black"}
-blu {"stroke": "blue", "fill": "blue", "alignment-baseline": "hanging"}
-red {"stroke": "red", "fill": "blue", "alignment-baseline": "baseline"}
-polygon {"points": "58,5 63,6 59,10", "fill": "#fbb", "stroke": "magenta"}
+size {"row": "10pt", "column": "8pt", "r0-1,7-8": "20pt", "r1-3,5-7": "80pt"}
+arrow {"id": 1, "width": 10, "height": 6, "color": "blue"}
+arrow {"id": 2, "width": 10, "height": 6, "color": "red"}
+image {"margin": "10pt 20pt 10pt 0pt", "background": "#cdf"}
+lines {"stroke-width": "1pt", "stroke": "black"}
+blu {"stroke": "blue", "fill": "blue", "alignment-baseline": "hanging", "arrow": 1}
+red {"stroke": "red", "fill": "red", "alignment-baseline": "baseline", "arrow": 2}
+polygon {"points": "8,2 16,6 24,2 36,6 33,7 38,8 52,6 48,2 70,7 76,2 68,0 53,1 44,0 37,2 23,0", "fill": "#fbb", "stroke": "#a0a", "z": -1}
 texts {"text-anchor": "middle", "font-size": "18pt"}
 "1" "3" "5" {"class": "red"}
 "0" "2" "4" {"class": "blu"}
 "0" {"font-size": "24pt"}
-rects {"fill": "#abba74", "stroke-width": "3pt"}
-rect {"x": 0, "y": 0, "width": 15, "height": 6, "stroke": "blue"}

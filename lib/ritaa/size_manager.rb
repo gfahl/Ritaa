@@ -11,7 +11,6 @@ module Ritaa
     def add_sizes(h)
       h.each do |k, v|
         case k
-          when "row", "col", "column"
           when "row"
             @default_row_size = parse_size(v)
           when "column", "col"

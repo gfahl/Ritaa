@@ -162,7 +162,7 @@ module Ritaa
       root.attributes["height"] = total_height.to_s
       root.attributes["viewBox"] =
         "%d %d %d %d" % [-margin_left, -margin_top, total_width, total_height]
-      h = @properties.reject { |k, v| k =~ /^margin\-/ || k == :"drop-shadow" || k == :background }
+      h = @properties.reject { |k, v| k =~ /^margin\-/ || k == :background }
       unless h.empty?
         root.attributes["style"] = h.map { |k, v| "%s: %s" % [k, v] }.join("; ")
       end
@@ -170,9 +170,9 @@ module Ritaa
       elm_style = REXML::Element.new("style")
       root.add_element(elm_style)
       @styles.each do |shape_type, h|
-        unless h.empty?
-          s = "%s { %s }" % [shape_type,
-            h.reject { |k, v| k == :"drop-shadow" }.map { |k, v| "%s: %s" % [k, v] }.join("; ")]
+        _h = h.reject { |k, v| k == :"drop-shadow" || k == :arrow }
+        unless _h.empty?
+          s = "%s { %s }" % [shape_type, _h.map { |k, v| "%s: %s" % [k, v] }.join("; ")]
           elm_style.add_text(REXML::Text.new(s))
         end
       end
