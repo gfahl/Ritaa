@@ -14,7 +14,22 @@ module Ritaa
         end
     end
 
-    def find_identifier(identifiers); nil; end
+    def find_identifier(identifiers)
+      res = identifiers.find do |x, y, s|
+        p1, p2 = @points
+        x1, y1 = p1.x, p1.y
+        x2, y2 = p2.x, p2.y
+        dx = s.size - 1
+        if y1 == y2
+          x1, x2 = [x1, x2].sort
+          (y - y1).abs == 1 && x + dx > x1 && x < x2
+        elsif x1 == x2
+          y1, y2 = [y1, y2].sort
+          y > y1 && y < y2 && (x + dx == x1 - 1 || x == x1 + 1)
+        end
+      end
+      res && res[2]
+    end
 
     def max_x; @points.map { |p| @image.convert_x_a2i(p) }.max; end
     def max_y; @points.map { |p| @image.convert_y_a2i(p) }.max; end

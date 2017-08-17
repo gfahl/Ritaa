@@ -170,7 +170,7 @@ module Ritaa
       elm_style = REXML::Element.new("style")
       root.add_element(elm_style)
       @styles.each do |shape_type, h|
-        _h = h.reject { |k, v| k == :"drop-shadow" || k == :arrow }
+        _h = h.reject { |k, v| k == :"drop-shadow" || k =~ /^arrow\-/ }
         unless _h.empty?
           s = "%s { %s }" % [shape_type, _h.map { |k, v| "%s: %s" % [k, v] }.join("; ")]
           elm_style.add_text(REXML::Text.new(s))

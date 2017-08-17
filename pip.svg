@@ -20,10 +20,10 @@
   </style>
   <rect x='0' y='-10' width='628' height='240' style='fill: #cdf'/>
   <polygon points='64,60 128,160 192,60 288,160 264,200 304,220 416,160 384,60 560,200 608,60 544,0 424,20 352,0 296,60 184,0' style='fill: #fbb; stroke: #a0a'/>
-  <line x1='0' y1='110' x2='91' y2='110' marker-end='url(#arrow_1_end)'/>
-  <line x1='160' y1='110' x2='235' y2='110' marker-end='url(#arrow_1_end)'/>
-  <line x1='240' y1='110' x2='395' y2='110' marker-end='url(#arrow_1_end)'/>
-  <line x1='400' y1='110' x2='443' y2='110' marker-end='url(#arrow_1_end)'/>
-  <line x1='448' y1='110' x2='555' y2='110' marker-end='url(#arrow_1_end)'/>
-  <line x1='96' y1='110' x2='155' y2='110' marker-end='url(#arrow_1_end)'/>
+  <line x1='0' y1='110' x2='91' y2='110' marker-end='url(#arrow_1_end)' class='blu'/>
+  <line x1='160' y1='110' x2='235' y2='110' marker-end='url(#arrow_1_end)' class='blu'/>
+  <line x1='240' y1='110' x2='395' y2='110' marker-end='url(#arrow_2_end)' class='red'/>
+  <line x1='400' y1='110' x2='443' y2='110' marker-end='url(#arrow_1_end)' class='blu'/>
+  <line x1='448' y1='110' x2='555' y2='110' marker-end='url(#arrow_2_end)' class='red'/>
+  <line x1='96' y1='110' x2='155' y2='110' marker-end='url(#arrow_2_end)' class='red'/>
 </svg>
