@@ -18,7 +18,7 @@ module Ritaa
         .to_shapes
         .each { |shape| add_shape(shape) }
       @properties = {}
-      @styles = { line: {}, polygon: {}, polyline: {}, path: {}, rect: {} }
+      @styles = { line: {}, polygon: {}, polyline: {}, path: {}, rect: {}, text: {} }
       @drop_shadow_styles = {} # id => Hash
       @arrow_styles = {} # id => ArrowStyle
       @size_manager = SizeManager.new(10, 5)
@@ -84,6 +84,7 @@ module Ritaa
     def margin_top; @properties[:"margin-top"].to_i || 0; end
 
     def parse_shapes_and_styles(shapes_and_styles)
+      text_styles = []
       shapes_and_styles.each do |s|
         case s
           when /size (.*)/ then @size_manager.add_sizes(JSON.parse($1))
@@ -107,7 +108,7 @@ module Ritaa
             end
             @styles["#" + id] ||= {}
             @styles["#" + id].merge!(h_style)
-          when /^(line|polyline|polygon|path|rect) (.*)/
+          when /^(line|polyline|polygon|path|rect|text) (.*)/
             klass = Object.const_get("Ritaa").const_get($1.capitalize)
             add_shape(klass.new(JSON.parse($2, symbolize_names: true)))
           when /^image (.*)/
@@ -129,7 +130,7 @@ module Ritaa
                 "margin-left": margins[3])
             end
             @properties.merge!(h)
-          when /^(line|polyline|polygon|path|rect)s (.*)/
+          when /^(line|polyline|polygon|path|rect|text)s (.*)/
             h = JSON.parse($2, symbolize_names: true)
             @styles[$1.to_sym].merge!(h)
           when /^drop-shadow (.*)/
@@ -144,9 +145,20 @@ module Ritaa
           when /^([a-z]\w*) (.*)/
             h = JSON.parse($2, symbolize_names: true)
             @styles["." + $1] = h
-          when /^((?:"[^"]*" )+)(.*)/
-            nil
+          when /^((?:(?:"[^"]*"|'[^']*'|\/[^\/]*\/) +)+)(.*)/
+            text_styles << [$1, JSON.parse($2, symbolize_names: true)]
           else raise "Unexpected entry: %s" % s
+        end
+      end
+      text_styles.each do |match_specs, h|
+        match_specs.scan(/(?:"([^"]*)"|'([^']*)'|\/([^\/]*)\/)/) do |a|
+          @shapes.grep(Text) do |shape|
+            if a[0] && shape.text == a[0] || 
+                a[1] && shape.text == a[1] ||
+                a[2] && shape.text =~ Regexp.new(a[2])
+              shape.properties.merge!(h)
+            end
+          end
         end
       end
     end

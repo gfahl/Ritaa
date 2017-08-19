@@ -11,6 +11,7 @@ require_relative 'ritaa/shape/path'
 require_relative 'ritaa/shape/polygon'
 require_relative 'ritaa/shape/polyline'
 require_relative 'ritaa/shape/rect'
+require_relative 'ritaa/shape/text'
 
 require_relative 'ritaa/graph/graph'
 require_relative 'ritaa/graph/directed_graph'

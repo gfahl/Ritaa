@@ -14,9 +14,9 @@
   </marker>
   <style>
     line { stroke-width: 1pt; stroke: black }
+    text { text-anchor: middle; font-size: 18pt }
     .blu { stroke: blue; fill: blue; alignment-baseline: hanging }
     .red { stroke: red; fill: red; alignment-baseline: baseline }
-    .texts { text-anchor: middle; font-size: 18pt }
   </style>
   <rect x='0' y='-10' width='628' height='240' style='fill: #cdf'/>
   <polygon points='64,60 128,160 192,60 288,160 264,200 304,220 416,160 384,60 560,200 608,60 544,0 424,20 352,0 296,60 184,0' style='fill: #fbb; stroke: #a0a'/>
@@ -26,4 +26,22 @@
   <line x1='400' y1='110' x2='443' y2='110' marker-end='url(#arrow_1_end)' class='blu'/>
   <line x1='448' y1='110' x2='555' y2='110' marker-end='url(#arrow_2_end)' class='red'/>
   <line x1='96' y1='110' x2='155' y2='110' marker-end='url(#arrow_2_end)' class='red'/>
+  <text x='128' y='100' class='red'>
+    1
+  </text>
+  <text x='200' y='120' class='blu'>
+    2
+  </text>
+  <text x='24' y='120' class='blu' style='font-size: 24pt'>
+    0
+  </text>
+  <text x='320' y='100' class='red'>
+    3
+  </text>
+  <text x='432' y='120' class='blu'>
+    4
+  </text>
+  <text x='504' y='100' class='red'>
+    5
+  </text>
 </svg>

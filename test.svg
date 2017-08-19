@@ -81,6 +81,39 @@
   <polyline points='175,280 175,310 200,310 225,310 225,280'/>
   <polyline points='285,190 300,180 285,170 300,160 285,150' style='stroke-width: 5; stroke: #abba74'/>
   <polyline points='300,210 300,230 300,250 300,270'/>
+  <text x='235' y='260'>
+    oy|oy
+  </text>
+  <text x='270' y='280'>
+    |
+  </text>
+  <text x='270' y='290'>
+    +
+  </text>
+  <text x='275' y='270'>
+    -----
+  </text>
+  <text x='300' y='180'>
+    +
+  </text>
+  <text x='325' y='290'>
+    hello
+  </text>
+  <text x='325' y='310'>
+    foo fie fum
+  </text>
+  <text x='35' y='220'>
+    foo
+  </text>
+  <text x='35' y='230'>
+    fie fum
+  </text>
+  <text x='80' y='230'>
+    oy
+  </text>
+  <text x='95' y='230'>
+    oy
+  </text>
   <line x1='100' y1='10' x2='75' y2='40' id='L1'/>
   <line x1='25' y1='10' x2='60' y2='40'/>
   <polygon points='0,30 175,30 190,50 15,50' id='P1'/>

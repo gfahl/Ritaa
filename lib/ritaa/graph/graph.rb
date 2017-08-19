@@ -28,6 +28,14 @@ module Ritaa
       "{G: %s . %s}" % [@nodes.map(&:inspect).join(" "), @edges.map(&:inspect).join(" ")]
     end
 
+    def edge_at(x, y)
+      @edges.find do |edge|
+        x1, y1 = edge.nodes[0].to_a
+        x2, y2 = edge.nodes[1].to_a
+        (x == x1 && x == x2 && y >= y1 && y <= y2) || (y == y1 && y == y2 && x >= x1 && x <= x2)
+      end
+    end
+
     class Node # abstract
       attr_reader :point
 

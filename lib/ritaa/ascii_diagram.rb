@@ -56,6 +56,22 @@ module Ritaa
         g.add_line(n1, n2, h[:marker1], h[:marker2])
       end
 
+      @texts = []
+      dia.each.with_index do |s, row|
+        col = 0
+        _s = s + "  "
+        while col < s.size
+          col += 1 while s[col] == " " || g.edge_at(col, row) || identifier_at(row, col)
+          next if col == s.size
+          text = ""
+          while _s[col..col + 1] != "  " && !g.edge_at(col, row) && !identifier_at(row, col)
+            text << s[col]
+            col += 1
+          end
+          @texts << [col - text.size, row, text]
+        end
+      end
+
       # split graph into two: one for faces and one for non-faces
       undecided = g.lines
       nonface_edges = []
@@ -69,6 +85,13 @@ module Ritaa
       end
       @faces_graph = DirectedGraph.new(undecided)
       @nonfaces_graph = UndirectedGraph.new(nonface_edges)
+    end
+
+    def identifier_at(row, col)
+      res = @identifiers.find do |x, y, s|
+        row == y && col >= x && col < x + s.size
+      end
+      res && res[2]
     end
 
     def to_shapes
@@ -117,6 +140,10 @@ module Ritaa
           arc = next_arc
         end
         res << Polygon.new(g) if angle_sum < g.nodes.size * 180
+      end
+
+      @texts.each do |col, row, s|
+        res << Text.new(text: s, x: col, y: row)
       end
 
       res.select do |shape|
