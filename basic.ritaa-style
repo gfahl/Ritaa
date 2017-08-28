@@ -12,6 +12,8 @@ texts {
   "stroke-width": "0pt",
   "font-family": "Arial, sans-serif",
   "font-size": "14pt",
-  "text-anchor": "middle", -- start, middle, end
-  "alignment-baseline": "middle" -- hanging, middle, baseline
+  "text-anchor": "middle",
+    -- start, middle, end
+  "alignment-baseline": "middle"
+    -- hanging, middle, baseline
   }
