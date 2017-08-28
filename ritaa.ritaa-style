@@ -1,0 +1,2 @@
+import basic
+image {"margin": "10pt", "background": "#fffcf9"}

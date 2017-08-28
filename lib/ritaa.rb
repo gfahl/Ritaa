@@ -25,11 +25,13 @@ module Ritaa
   def run(argv)
     svg = argv.delete("-svg")
     png = argv.delete("-png")
+    ix = argv.index("-style")
+    style = ix && argv.delete_at(ix) && argv.delete_at(ix) || "ritaa"
     infile = argv[0]
     infile =~ /(.*)\.ritaa$/
     svg_file = $1 + ".svg"
     png_file = $1 + ".png"
-    img = Image.new(File.readlines(infile).map(&:chomp))
+    img = Image.new(File.readlines(infile).map(&:chomp), style)
     File.open(svg_file, "w") { |f| f.puts img.to_svg }
     system("svgexport %s %s" % [svg_file, png_file]) if png
     File.delete(svg_file) unless svg

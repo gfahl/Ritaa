@@ -9,10 +9,28 @@ module Ritaa
       shapes_and_styles.map { |s| s[/^\w+/] }.compact.uniq - RESERVED_WORDS + ["nil"]
     end
 
-    def initialize(spec)
+    def Image.expand_import(shapes_and_styles)
+      shapes_and_styles.map do |s|
+        if s =~ /^import (.*)/
+          a = File.readlines("%s.ritaa-style" % $1).map(&:chomp)
+          Image.expand_import(a)
+        else [s]
+        end
+      end.flatten
+    end
+
+    def Image.expand_import_0(shapes_and_styles)
+    end
+
+    def initialize(spec, style)
       ix = spec.find_index { |s| s =~ /^\w/ }
       graphics, text = spec[0...ix], spec[ix..-1]
       addendum, shapes_and_styles = text.partition { |s| s =~ /^edge / }
+      shapes_and_styles.unshift("import %s" % style)
+      shapes_and_styles = Image.expand_import(shapes_and_styles)
+      # while shapes_and_styles.find { |s| s =~ /^import / }
+      #   shapes_and_styles = Image.expand_import(shapes_and_styles)
+      # end
       @shapes = []
       AsciiDiagram.new(graphics, addendum, Image.extract_identifiers(shapes_and_styles))
         .to_shapes

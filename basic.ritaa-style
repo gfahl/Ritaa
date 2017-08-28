@@ -1,0 +1,17 @@
+size {
+  "row": "10pt",
+  "column": "5pt"
+  }
+lines {
+  "stroke-width": "1pt",
+  "stroke": "black"
+  }
+texts {
+  "fill": "black",
+  "stroke": "black",
+  "stroke-width": "0pt",
+  "font-family": "Arial, sans-serif",
+  "font-size": "14pt",
+  "text-anchor": "middle", -- start, middle, end
+  "alignment-baseline": "middle" -- hanging, middle, baseline
+  }
