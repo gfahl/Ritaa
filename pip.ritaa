@@ -7,14 +7,23 @@
                                                                                           
                                                                                           
                                                                                           
-size {"row": "10pt", "column": "8pt", "r0-1,7-8": "20pt", "r1-3,5-7": "80pt"}
+size {
+  "row": "10pt",
+  "column": "8pt",
+  "r0-1,7-8": "20pt",
+  "r1-3,5-7": "80pt"
+  }
 arrow {"id": 1, "width": 10, "height": 6, "color": "blue"}
 arrow {"id": 2, "width": 10, "height": 6, "color": "red"}
-image {"margin": "10pt 20pt 10pt 0pt", "background": "#cdf"}
+image {"margin": "10pt 20pt 10pt 0pt",
+  "background": "#cdf"}
 lines {"stroke-width": "1pt", "stroke": "black"}
 blu {"stroke": "blue", "fill": "blue", "alignment-baseline": "hanging", "arrow-end": 1}
 red {"stroke": "red", "fill": "red", "alignment-baseline": "baseline", "arrow-end": 2}
-polygon {"points": "8,2 16,6 24,2 36,6 33,7 38,8 52,6 48,2 70,7 76,2 68,0 53,1 44,0 37,2 23,0", "fill": "#fbb", "stroke": "#a0a", "z": -1}
+polygon {
+  "points": "8,2 16,6 24,2 36,6 33,7 38,8 52,6 48,2 70,7 76,2 68,0 53,1 44,0 37,2 23,0",
+  "fill": "#fbb", "stroke": "#a0a", "z": -1
+  }
 texts {"text-anchor": "middle", "font-size": "18pt", "stroke-width": 0}
 "1" "3" "5" {"class": "red"}
 "0" "2" "4" {"class": "blu"}

@@ -12,6 +12,14 @@ module Ritaa
     def initialize(spec)
       ix = spec.find_index { |s| s =~ /^\w/ }
       graphics, text = spec[0...ix], spec[ix..-1]
+      text.delete_if { |s| s =~ /\s*\-\-/ }
+      a = [""]
+      text.each do |s|
+        a[-1] << s.strip << " "
+        a << "" if s =~ /\}\s*$/
+      end
+      text = a[0..-2].map(&:rstrip)
+p text
       addendum, shapes_and_styles = text.partition { |s| s =~ /^edge / }
       @shapes = []
       AsciiDiagram.new(graphics, addendum, Image.extract_identifiers(shapes_and_styles))
